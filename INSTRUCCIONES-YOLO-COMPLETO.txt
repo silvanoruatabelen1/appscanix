@@ -1,0 +1,154 @@
+═══════════════════════════════════════════════════════════════════
+  🚀 INTEGRACIÓN YOLO COMPLETA - SCANIX AI SERVICE
+═══════════════════════════════════════════════════════════════════
+
+✅ ESTRUCTURA CREADA:
+├── ai-service/
+│   ├── app.py              # Flask con YOLO
+│   ├── requirements.txt    # Dependencias Python
+│   └── models/             # Aquí va tu best.pt
+├── scanix-smart-shop-main/
+│   ├── src/components/ai/
+│   │   └── BeverageRecognition.tsx
+│   └── backend/routes/recognition.js
+
+═══════════════════════════════════════════════════════════════════
+📋 PASOS PARA CONFIGURAR:
+═══════════════════════════════════════════════════════════════════
+
+1️⃣ COLOCAR MODELO:
+   • Copia tu best.pt a: ai-service/models/best.pt
+   • El modelo debe estar entrenado para bebidas argentinas
+
+2️⃣ INSTALAR DEPENDENCIAS PYTHON:
+   cd ai-service
+   pip install -r requirements.txt
+
+3️⃣ INICIAR SERVICIOS:
+   # Terminal 1: AI Service (Puerto 5000)
+   cd ai-service
+   python app.py
+   
+   # Terminal 2: Backend (Puerto 3001)
+   cd scanix-smart-shop-main
+   node scanix-server-fixed.js
+   
+   # Terminal 3: Frontend (Puerto 5173)
+   cd scanix-smart-shop-main
+   npm run dev
+
+═══════════════════════════════════════════════════════════════════
+🔧 FUNCIONALIDADES IMPLEMENTADAS:
+═══════════════════════════════════════════════════════════════════
+
+✅ Flask API con YOLOv8
+   • Endpoint: /recognize
+   • Endpoint: /health
+   • Endpoint: /classes
+
+✅ Proxy en Backend Node.js
+   • /api/recognition/recognize
+   • /api/recognition/health
+   • /api/recognition/classes
+
+✅ Componente React
+   • BeverageRecognition.tsx
+   • Upload de imágenes
+   • Detección automática
+   • Agregado al carrito
+
+✅ Mapeo de Bebidas
+   • 30 bebidas argentinas
+   • SKU, nombre, precio
+   • Confianza del modelo
+
+═══════════════════════════════════════════════════════════════════
+🎯 FLUJO DE RECONOCIMIENTO:
+═══════════════════════════════════════════════════════════════════
+
+1. Usuario sube imagen → Frontend
+2. Frontend → Backend Node.js (/api/recognition/recognize)
+3. Backend → Flask AI Service (http://localhost:5000/recognize)
+4. YOLO procesa imagen → Detecta bebidas
+5. Mapea detecciones → Bebidas argentinas
+6. Retorna productos → Frontend
+7. Agrega al carrito automáticamente
+
+═══════════════════════════════════════════════════════════════════
+📱 USO EN FRONTEND:
+═══════════════════════════════════════════════════════════════════
+
+import { BeverageRecognition } from '@/components/ai/BeverageRecognition';
+
+// En tu componente:
+<BeverageRecognition 
+  onItemsRecognized={(items) => {
+    console.log('Productos reconocidos:', items);
+  }}
+/>
+
+═══════════════════════════════════════════════════════════════════
+🛠️ NPM SCRIPTS DISPONIBLES:
+═══════════════════════════════════════════════════════════════════
+
+npm run install-ai    # Instalar dependencias Python
+npm run start-ai      # Iniciar AI service
+npm run ai:install    # Alias para instalar
+npm run ai:start      # Alias para iniciar
+npm run ai:dev        # Modo desarrollo
+
+═══════════════════════════════════════════════════════════════════
+🔍 ENDPOINTS DISPONIBLES:
+═══════════════════════════════════════════════════════════════════
+
+AI Service (Flask - Puerto 5000):
+  GET  /health          # Estado del servicio
+  POST /recognize       # Reconocer bebidas
+  GET  /classes         # Clases del modelo
+
+Backend (Node.js - Puerto 3001):
+  GET  /api/recognition/health
+  POST /api/recognition/recognize
+  GET  /api/recognition/classes
+
+═══════════════════════════════════════════════════════════════════
+📊 CONFIGURACIÓN YOLO:
+═══════════════════════════════════════════════════════════════════
+
+• Modelo: best.pt (tu modelo entrenado)
+• Confianza: 0.5 (ajustable)
+• Timeout: 30 segundos
+• Formatos: JPG, PNG, WEBP
+• Tamaño máximo: 10MB
+
+═══════════════════════════════════════════════════════════════════
+🐛 TROUBLESHOOTING:
+═══════════════════════════════════════════════════════════════════
+
+❌ "AI Service no disponible"
+   → Verifica que Flask esté corriendo en puerto 5000
+   → Revisa que best.pt esté en ai-service/models/
+
+❌ "Error cargando modelo"
+   → Verifica que best.pt sea válido
+   → Revisa dependencias: pip install -r requirements.txt
+
+❌ "Timeout en reconocimiento"
+   → Imagen muy grande o compleja
+   → Reduce tamaño de imagen
+
+❌ "No se detectaron bebidas"
+   → Ajusta CONFIDENCE_THRESHOLD en app.py
+   → Verifica que el modelo esté entrenado para bebidas
+
+═══════════════════════════════════════════════════════════════════
+🚀 PRÓXIMOS PASOS:
+═══════════════════════════════════════════════════════════════════
+
+1. Coloca tu best.pt en ai-service/models/
+2. Ejecuta: npm run install-ai
+3. Ejecuta: npm run start-ai
+4. Inicia el backend y frontend
+5. ¡Prueba el reconocimiento!
+
+═══════════════════════════════════════════════════════════════════

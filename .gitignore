@@ -1,0 +1,86 @@
+# SCANIX - Git Ignore
+# Archivos y directorios a ignorar
+
+# Dependencias Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencias Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Archivos de configuración local
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de build
+dist/
+build/
+*.tgz
+*.tar.gz
+
+# Archivos de base de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de usuario específicos
+scanix-users.json
+scanix-products.json
+scanix-stock.json
+
+# Archivos de modelo (muy grandes para Git)
+ai-service/models/*.pt
+ai-service/models/*.pth
+ai-service/models/*.onnx
+
+# Archivos de cache
+.cache/
+*.cache
+
+# Archivos de sistema
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Archivos de backup
+*.bak
+*.backup
+*~
+
+# Archivos de documentación temporal
+*.md.bak
+*.txt.bak

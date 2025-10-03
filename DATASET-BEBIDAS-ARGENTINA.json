@@ -1,0 +1,303 @@
+[
+  {
+    "sku": "COCA-500",
+    "nombre": "Coca Cola 500ml",
+    "marca": "Coca-Cola",
+    "tipo": "Gaseosa Cola",
+    "unidad": "botella",
+    "precioBase": 650,
+    "volumen": "500ml",
+    "keywords": ["coca", "cola", "roja", "gaseosa"]
+  },
+  {
+    "sku": "COCA-1.5L",
+    "nombre": "Coca Cola 1.5L",
+    "marca": "Coca-Cola",
+    "tipo": "Gaseosa Cola",
+    "unidad": "botella",
+    "precioBase": 1450,
+    "volumen": "1.5L",
+    "keywords": ["coca", "cola", "roja", "gaseosa", "litro"]
+  },
+  {
+    "sku": "COCA-ZERO-500",
+    "nombre": "Coca Cola Zero 500ml",
+    "marca": "Coca-Cola",
+    "tipo": "Gaseosa Cola Light",
+    "unidad": "botella",
+    "precioBase": 650,
+    "volumen": "500ml",
+    "keywords": ["coca", "zero", "negra", "gaseosa", "sin azucar"]
+  },
+  {
+    "sku": "SPRITE-500",
+    "nombre": "Sprite 500ml",
+    "marca": "Coca-Cola",
+    "tipo": "Gaseosa Lima-Limón",
+    "unidad": "botella",
+    "precioBase": 620,
+    "volumen": "500ml",
+    "keywords": ["sprite", "verde", "lima", "limon", "gaseosa"]
+  },
+  {
+    "sku": "FANTA-500",
+    "nombre": "Fanta Naranja 500ml",
+    "marca": "Coca-Cola",
+    "tipo": "Gaseosa Sabor Naranja",
+    "unidad": "botella",
+    "precioBase": 620,
+    "volumen": "500ml",
+    "keywords": ["fanta", "naranja", "gaseosa"]
+  },
+  {
+    "sku": "PEPSI-500",
+    "nombre": "Pepsi 500ml",
+    "marca": "PepsiCo",
+    "tipo": "Gaseosa Cola",
+    "unidad": "botella",
+    "precioBase": 600,
+    "volumen": "500ml",
+    "keywords": ["pepsi", "azul", "cola", "gaseosa"]
+  },
+  {
+    "sku": "PEPSI-1.5L",
+    "nombre": "Pepsi 1.5L",
+    "marca": "PepsiCo",
+    "tipo": "Gaseosa Cola",
+    "unidad": "botella",
+    "precioBase": 1350,
+    "volumen": "1.5L",
+    "keywords": ["pepsi", "azul", "cola", "gaseosa", "litro"]
+  },
+  {
+    "sku": "7UP-500",
+    "nombre": "7UP 500ml",
+    "marca": "PepsiCo",
+    "tipo": "Gaseosa Lima-Limón",
+    "unidad": "botella",
+    "precioBase": 600,
+    "volumen": "500ml",
+    "keywords": ["7up", "verde", "lima", "limon", "gaseosa"]
+  },
+  {
+    "sku": "MIRINDA-500",
+    "nombre": "Mirinda Naranja 500ml",
+    "marca": "PepsiCo",
+    "tipo": "Gaseosa Sabor Naranja",
+    "unidad": "botella",
+    "precioBase": 600,
+    "volumen": "500ml",
+    "keywords": ["mirinda", "naranja", "gaseosa"]
+  },
+  {
+    "sku": "AGUA-VILLA-500",
+    "nombre": "Agua Villa del Sur 500ml",
+    "marca": "Danone",
+    "tipo": "Agua Mineral",
+    "unidad": "botella",
+    "precioBase": 400,
+    "volumen": "500ml",
+    "keywords": ["agua", "villa", "mineral", "transparente"]
+  },
+  {
+    "sku": "AGUA-VILLA-1.5L",
+    "nombre": "Agua Villa del Sur 1.5L",
+    "marca": "Danone",
+    "tipo": "Agua Mineral",
+    "unidad": "botella",
+    "precioBase": 750,
+    "volumen": "1.5L",
+    "keywords": ["agua", "villa", "mineral", "transparente", "litro"]
+  },
+  {
+    "sku": "AGUA-VILLA-6L",
+    "nombre": "Agua Villa del Sur 6L",
+    "marca": "Danone",
+    "tipo": "Agua Mineral",
+    "unidad": "bidon",
+    "precioBase": 1800,
+    "volumen": "6L",
+    "keywords": ["agua", "villa", "mineral", "transparente", "bidon"]
+  },
+  {
+    "sku": "AGUA-ECO-500",
+    "nombre": "Agua Eco de los Andes 500ml",
+    "marca": "Eco de los Andes",
+    "tipo": "Agua Mineral",
+    "unidad": "botella",
+    "precioBase": 380,
+    "volumen": "500ml",
+    "keywords": ["agua", "eco", "andes", "mineral", "transparente"]
+  },
+  {
+    "sku": "VILLAVICENCIO-500",
+    "nombre": "Villavicencio 500ml",
+    "marca": "Danone",
+    "tipo": "Agua Mineral",
+    "unidad": "botella",
+    "precioBase": 420,
+    "volumen": "500ml",
+    "keywords": ["villavicencio", "agua", "mineral", "transparente"]
+  },
+  {
+    "sku": "CUNITA-500",
+    "nombre": "Cunita 500ml",
+    "marca": "Danone",
+    "tipo": "Agua Saborizada",
+    "unidad": "botella",
+    "precioBase": 450,
+    "volumen": "500ml",
+    "keywords": ["cunita", "agua", "saborizada"]
+  },
+  {
+    "sku": "LEVITE-500",
+    "nombre": "Levité Pomelo 500ml",
+    "marca": "Coca-Cola",
+    "tipo": "Agua Saborizada",
+    "unidad": "botella",
+    "precioBase": 480,
+    "volumen": "500ml",
+    "keywords": ["levite", "pomelo", "agua", "saborizada"]
+  },
+  {
+    "sku": "AQUARIUS-500",
+    "nombre": "Aquarius Pomelo 500ml",
+    "marca": "Coca-Cola",
+    "tipo": "Bebida Isotónica",
+    "unidad": "botella",
+    "precioBase": 550,
+    "volumen": "500ml",
+    "keywords": ["aquarius", "pomelo", "isotonica", "deportiva"]
+  },
+  {
+    "sku": "GATORADE-500",
+    "nombre": "Gatorade Naranja 500ml",
+    "marca": "PepsiCo",
+    "tipo": "Bebida Isotónica",
+    "unidad": "botella",
+    "precioBase": 650,
+    "volumen": "500ml",
+    "keywords": ["gatorade", "naranja", "isotonica", "deportiva"]
+  },
+  {
+    "sku": "POWERADE-500",
+    "nombre": "Powerade Mountain Blast 500ml",
+    "marca": "Coca-Cola",
+    "tipo": "Bebida Isotónica",
+    "unidad": "botella",
+    "precioBase": 620,
+    "volumen": "500ml",
+    "keywords": ["powerade", "azul", "isotonica", "deportiva"]
+  },
+  {
+    "sku": "SPEED-250",
+    "nombre": "Speed Energy Drink 250ml",
+    "marca": "Coca-Cola",
+    "tipo": "Energizante",
+    "unidad": "lata",
+    "precioBase": 800,
+    "volumen": "250ml",
+    "keywords": ["speed", "energy", "energizante", "lata"]
+  },
+  {
+    "sku": "REDBULL-250",
+    "nombre": "Red Bull 250ml",
+    "marca": "Red Bull",
+    "tipo": "Energizante",
+    "unidad": "lata",
+    "precioBase": 1200,
+    "volumen": "250ml",
+    "keywords": ["red bull", "energy", "energizante", "lata", "azul"]
+  },
+  {
+    "sku": "MONSTER-473",
+    "nombre": "Monster Energy 473ml",
+    "marca": "Monster",
+    "tipo": "Energizante",
+    "unidad": "lata",
+    "precioBase": 1350,
+    "volumen": "473ml",
+    "keywords": ["monster", "energy", "energizante", "lata", "verde"]
+  },
+  {
+    "sku": "QUILMES-1L",
+    "nombre": "Quilmes Cerveza 1L",
+    "marca": "Quilmes",
+    "tipo": "Cerveza",
+    "unidad": "botella",
+    "precioBase": 950,
+    "volumen": "1L",
+    "keywords": ["quilmes", "cerveza", "litro"]
+  },
+  {
+    "sku": "BRAHMA-1L",
+    "nombre": "Brahma Cerveza 1L",
+    "marca": "Brahma",
+    "tipo": "Cerveza",
+    "unidad": "botella",
+    "precioBase": 900,
+    "volumen": "1L",
+    "keywords": ["brahma", "cerveza", "litro"]
+  },
+  {
+    "sku": "ANDES-1L",
+    "nombre": "Andes Cerveza 1L",
+    "marca": "Andes",
+    "tipo": "Cerveza",
+    "unidad": "botella",
+    "precioBase": 850,
+    "volumen": "1L",
+    "keywords": ["andes", "cerveza", "litro"]
+  },
+  {
+    "sku": "STELLA-473",
+    "nombre": "Stella Artois 473ml",
+    "marca": "Stella Artois",
+    "tipo": "Cerveza Premium",
+    "unidad": "lata",
+    "precioBase": 1100,
+    "volumen": "473ml",
+    "keywords": ["stella", "artois", "cerveza", "lata", "premium"]
+  },
+  {
+    "sku": "CORONA-355",
+    "nombre": "Corona Extra 355ml",
+    "marca": "Corona",
+    "tipo": "Cerveza Premium",
+    "unidad": "botella",
+    "precioBase": 1300,
+    "volumen": "355ml",
+    "keywords": ["corona", "cerveza", "premium"]
+  },
+  {
+    "sku": "CEPITA-1L",
+    "nombre": "Cepita Naranja 1L",
+    "marca": "Coca-Cola",
+    "tipo": "Jugo",
+    "unidad": "tetrapack",
+    "precioBase": 850,
+    "volumen": "1L",
+    "keywords": ["cepita", "naranja", "jugo", "litro"]
+  },
+  {
+    "sku": "BAGGIO-1L",
+    "nombre": "Baggio Multifruta 1L",
+    "marca": "Baggio",
+    "tipo": "Jugo",
+    "unidad": "tetrapack",
+    "precioBase": 750,
+    "volumen": "1L",
+    "keywords": ["baggio", "multifruta", "jugo", "litro"]
+  },
+  {
+    "sku": "BC-1L",
+    "nombre": "BC Naranja 1L",
+    "marca": "BC",
+    "tipo": "Jugo",
+    "unidad": "tetrapack",
+    "precioBase": 700,
+    "volumen": "1L",
+    "keywords": ["bc", "naranja", "jugo", "litro"]
+  }
+]
+

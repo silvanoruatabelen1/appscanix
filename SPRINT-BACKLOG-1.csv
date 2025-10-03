@@ -1,0 +1,43 @@
+ID,Enunciado,Tarea,Dueño/Voluntario,Estado,# Horas estimadas totales,Día Cons.,Realizado
+HU01,Como cajero quiero escanear productos con la cámara para agilizar el proceso de venta,Diseñar interfaz de escaneo,Equipo Frontend,Completado,4,1,4
+HU01,Como cajero quiero escanear productos con la cámara para agilizar el proceso de venta,Implementar captura de imagen desde cámara,Equipo Frontend,Completado,6,2,6
+HU01,Como cajero quiero escanear productos con la cámara para agilizar el proceso de venta,Implementar subida de archivo de imagen,Equipo Frontend,Completado,3,2,3
+HU01,Como cajero quiero escanear productos con la cámara para agilizar el proceso de venta,Crear validaciones de imagen (tamaño/formato),Equipo Frontend,Completado,2,2,2
+HU01,Como cajero quiero escanear productos con la cámara para agilizar el proceso de venta,Implementar mock de reconocimiento inteligente,Equipo Backend,Completado,8,3,8
+HU01,Como cajero quiero escanear productos con la cámara para agilizar el proceso de venta,Integrar reconocimiento con frontend,Equipo Frontend,Completado,4,3,4
+HU02,Como administrador quiero gestionar el catálogo de productos para mantener información actualizada,Diseñar pantalla de productos,Equipo Frontend,Completado,3,1,3
+HU02,Como administrador quiero gestionar el catálogo de productos para mantener información actualizada,Implementar listado de productos con paginación,Equipo Frontend,Completado,4,2,4
+HU02,Como administrador quiero gestionar el catálogo de productos para mantener información actualizada,Crear formulario de alta de producto,Equipo Frontend,Completado,5,2,5
+HU02,Como administrador quiero gestionar el catálogo de productos para mantener información actualizada,Implementar edición de producto,Equipo Frontend,Completado,4,3,4
+HU02,Como administrador quiero gestionar el catálogo de productos para mantener información actualizada,Implementar eliminación de producto,Equipo Frontend,Completado,2,3,2
+HU02,Como administrador quiero gestionar el catálogo de productos para mantener información actualizada,Crear endpoints CRUD de productos,Equipo Backend,Completado,6,2,6
+HU02,Como administrador quiero gestionar el catálogo de productos para mantener información actualizada,Implementar búsqueda de productos,Equipo Frontend,Completado,3,3,3
+HU03,Como operador quiero gestionar múltiples depósitos para organizar el inventario,Diseñar pantalla de depósitos,Equipo Frontend,Completado,3,1,3
+HU03,Como operador quiero gestionar múltiples depósitos para organizar el inventario,Implementar listado de depósitos,Equipo Frontend,Completado,3,2,3
+HU03,Como operador quiero gestionar múltiples depósitos para organizar el inventario,Crear formulario de alta de depósito,Equipo Frontend,Completado,4,2,4
+HU03,Como operador quiero gestionar múltiples depósitos para organizar el inventario,Implementar edición de depósito,Equipo Frontend,Completado,3,2,3
+HU03,Como operador quiero gestionar múltiples depósitos para organizar el inventario,Crear endpoints CRUD de depósitos,Equipo Backend,Completado,5,2,5
+HU04,Como operador quiero consultar el stock por depósito para conocer disponibilidad,Diseñar vista de stock por depósito,Equipo Frontend,Completado,3,1,3
+HU04,Como operador quiero consultar el stock por depósito para conocer disponibilidad,Implementar listado de stock con filtros,Equipo Frontend,Completado,5,2,5
+HU04,Como operador quiero consultar el stock por depósito para conocer disponibilidad,Crear funcionalidad de ajuste manual de stock,Equipo Frontend,Completado,4,3,4
+HU04,Como operador quiero consultar el stock por depósito para conocer disponibilidad,Implementar endpoint de consulta de stock,Equipo Backend,Completado,4,2,4
+HU04,Como operador quiero consultar el stock por depósito para conocer disponibilidad,Crear endpoint de ajuste de stock,Equipo Backend,Completado,3,3,3
+HU05,Como cajero quiero generar tickets de venta para formalizar transacciones,Diseñar formato de ticket,Equipo Frontend,Completado,2,1,2
+HU05,Como cajero quiero generar tickets de venta para formalizar transacciones,Implementar generación de ticket desde carrito,Equipo Frontend,Completado,5,2,5
+HU05,Como cajero quiero generar tickets de venta para formalizar transacciones,Crear pantalla de visualización de ticket,Equipo Frontend,Completado,4,2,4
+HU05,Como cajero quiero generar tickets de venta para formalizar transacciones,Implementar impresión de ticket,Equipo Frontend,Completado,6,3,6
+HU05,Como cajero quiero generar tickets de venta para formalizar transacciones,Crear endpoint de creación de ticket,Equipo Backend,Completado,5,2,5
+HU05,Como cajero quiero generar tickets de venta para formalizar transacciones,Implementar validación de stock en ticket,Equipo Backend,Completado,4,3,4
+HU05,Como cajero quiero generar tickets de venta para formalizar transacciones,Implementar descuento automático de stock,Equipo Backend,Completado,3,3,3
+HU06,Como cajero quiero gestionar un carrito de compra para acumular productos antes de vender,Diseñar pantalla de carrito,Equipo Frontend,Completado,3,1,3
+HU06,Como cajero quiero gestionar un carrito de compra para acumular productos antes de vender,Implementar agregar productos al carrito,Equipo Frontend,Completado,4,2,4
+HU06,Como cajero quiero gestionar un carrito de compra para acumular productos antes de vender,Crear funcionalidad de modificar cantidades,Equipo Frontend,Completado,3,2,3
+HU06,Como cajero quiero gestionar un carrito de compra para acumular productos antes de vender,Implementar eliminar productos del carrito,Equipo Frontend,Completado,2,2,2
+HU06,Como cajero quiero gestionar un carrito de compra para acumular productos antes de vender,Crear cálculo de subtotales y total,Equipo Frontend,Completado,3,2,3
+HU06,Como cajero quiero gestionar un carrito de compra para acumular productos antes de vender,Implementar selección de depósito origen,Equipo Frontend,Completado,2,2,2
+HU07,Como administrador quiero configurar precios escalonados para incentivar compras por volumen,Diseñar modal de configuración de tiers,Equipo Frontend,Completado,4,1,4
+HU07,Como administrador quiero configurar precios escalonados para incentivar compras por volumen,Implementar CRUD de tiers por producto,Equipo Frontend,Completado,6,2,6
+HU07,Como administrador quiero configurar precios escalonados para incentivar compras por volumen,Crear validaciones de tiers (rangos sin gaps),Equipo Frontend,Completado,5,3,5
+HU07,Como administrador quiero configurar precios escalonados para incentivar compras por volumen,Implementar auto-ajuste de rangos,Equipo Frontend,Completado,4,3,4
+HU07,Como administrador quiero configurar precios escalonados para incentivar compras por volumen,Crear endpoint de actualización de tiers,Equipo Backend,Completado,3,2,3
+HU07,Como administrador quiero configurar precios escalonados para incentivar compras por volumen,Implementar cálculo automático de precio según cantidad,Equipo Backend,Completado,4,3,4
