@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Loader2, ScanLine } from 'lucide-react';
+import { ShoppingCart, Loader2, ScanLine, Zap } from 'lucide-react';
 import { ImageUpload } from '@/components/ImageUpload';
 import { RecognitionResults } from '@/components/RecognitionResults';
+import { BeverageRecognition } from '@/components/ai/BeverageRecognition';
 import { Button } from '@/components/ui/custom-button';
 import { useToast } from '@/hooks/use-toast';
 import { useCartStore } from '@/store/cartStore';
@@ -95,6 +96,28 @@ const ScanPage: React.FC = () => {
               <p className="text-muted-foreground">Analizando imagen...</p>
             </div>
           )}
+        </div>
+
+        {/* YOLO Recognition Section */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl shadow-card-hover p-8 mb-6 border border-blue-200">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Zap className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-blue-900">Reconocimiento YOLO</h3>
+              <p className="text-sm text-blue-700">Detecta bebidas argentinas con inteligencia artificial</p>
+            </div>
+          </div>
+          
+          <BeverageRecognition 
+            onItemsRecognized={(items) => {
+              console.log('Productos reconocidos con YOLO:', items);
+              setRecognizedItems(items);
+              setShowResults(true);
+              setState('success');
+            }}
+          />
         </div>
 
         {/* Cart Summary */}
