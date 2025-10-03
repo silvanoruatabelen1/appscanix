@@ -205,17 +205,6 @@ node test-sprint3.js  # Pruebas Sprint 3
 3. Inicializar base de datos
 4. Ejecutar: `npm start`
 
-## 🤝 Contribución
-
-Este proyecto fue desarrollado como trabajo integrador para la materia "Ingeniería y Calidad de Software" en UTN San Francisco.
-
-### Desarrollado por:
-- **Silvano Ruata Belén**
-- Universidad Tecnológica Nacional - San Francisco
-
-## 📄 Licencia
-
-Este proyecto es para fines educativos y académicos.
 
 ## 🔮 Roadmap
 
@@ -226,10 +215,6 @@ Este proyecto es para fines educativos y académicos.
 - [ ] Modo offline
 - [ ] App móvil
 
-## 📞 Soporte
-
-Para soporte técnico o consultas:
-- GitHub Issues: [https://github.com/silvanoruatabelen1/appscanix/issues](https://github.com/silvanoruatabelen1/appscanix/issues)
 
 ---
 
