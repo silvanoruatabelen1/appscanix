@@ -384,29 +384,34 @@ jobs:
 
 ## 📋 User Stories Implementadas
 
-### Sprint 1: Core Features
+### Sprint 1: Funcionalidades Core (2 semanas) - ✅ COMPLETADO
 - ✅ **HU01**: Sistema de autenticación con roles
 - ✅ **HU02**: Gestión de productos y catálogo
 - ✅ **HU03**: Sistema de stock por depósito
-- ✅ **HU04**: Reconocimiento de productos por IA
 - ✅ **HU05**: Generación de tickets de venta
 - ✅ **HU06**: Cálculo de precios con tiers
 - ✅ **HU07**: Validación de stock en ventas
 - ✅ **HU08**: Gestión completa de usuarios
 - ✅ **HU09**: Dashboard principal
 - ✅ **HU10**: Navegación y sidebar
-
-### Sprint 2: Advanced Features
 - ✅ **HU11**: Transferencias entre depósitos
+
+### Sprint 2: Funcionalidades Avanzadas (2 semanas) - ✅ COMPLETADO
 - ✅ **HU12**: Validación de stock en transferencias
 - ✅ **HU13**: Reportes de ventas
 - ✅ **HU14**: Reportes de stock
 - ✅ **HU15**: Exportación de datos (CSV/PDF)
 - ✅ **HU16**: Gestión de depósitos
 - ✅ **HU17**: Historial de movimientos
-- ✅ **HU18**: Notificaciones del sistema
 - ✅ **HU19**: Configuración de la aplicación
 - ✅ **HU20**: Optimización y rendimiento
+
+### Sprint 3: IA y Notificaciones (1 mes) - 🔄 EN DESARROLLO
+- 🔄 **HU04**: Reconocimiento de productos por IA (Simulado actualmente)
+- 🔄 **HU18**: Notificaciones del sistema (WhatsApp)
+- 🔄 **HU21**: Mejoras estéticas y UX
+- 🔄 **HU22**: Integración completa de IA
+- 🔄 **HU23**: Sistema de notificaciones avanzado
 
 ## 🎯 Conclusiones
 

@@ -83,56 +83,72 @@ npm run dev
 
 ## 📱 Funcionalidades Principales
 
-### 👥 Gestión de Usuarios
+### ✅ Funcionalidades Implementadas (Sprint 1 y 2)
+
+#### 👥 Gestión de Usuarios
 - Crear usuarios con roles (Admin, Operador, Cajero)
 - Contraseñas temporales con cambio obligatorio
 - Gestión completa de usuarios (activar/desactivar, eliminar)
 
-### 🤖 Reconocimiento de Productos
-- Escaneo con cámara del celular
-- Reconocimiento de 3 productos argentinos específicos
-- Integración con YOLOv8 + CLIP + k-NN
-
-### 🧾 Sistema de Ventas
+#### 🧾 Sistema de Ventas
 - Generación de tickets
 - Cálculo automático de precios con tiers
 - Validación de stock en tiempo real
 
-### 🔄 Transferencias
+#### 🔄 Transferencias
 - Transferencias entre depósitos
 - Validación de stock disponible
 - Registro de movimientos
 
-### 📊 Reportes
+#### 📊 Reportes
 - Reportes de ventas y stock
 - Exportación a CSV/PDF
 - KPIs y métricas
 
+### 🔄 Funcionalidades en Desarrollo (Sprint 3)
+
+#### 🤖 Reconocimiento de Productos
+- Escaneo con cámara del celular
+- Reconocimiento de 3 productos argentinos específicos
+- Integración con YOLOv8 + CLIP + k-NN
+- **Estado actual:** Simulado para demostración
+
+#### 📱 Notificaciones WhatsApp
+- Notificaciones automáticas de ventas
+- Alertas de stock bajo
+- Reportes por WhatsApp
+- **Estado actual:** En desarrollo
+
 ## 🎯 Product Backlog
 
-### Sprint 1: Funcionalidades Core
+### Sprint 1: Funcionalidades Core (2 semanas)
 1. **HU01** - Autenticación y roles de usuario
 2. **HU02** - Gestión de productos y catálogo
 3. **HU03** - Sistema de stock por depósito
-4. **HU04** - Reconocimiento de productos por IA
-5. **HU05** - Generación de tickets de venta
-6. **HU06** - Cálculo de precios con tiers
-7. **HU07** - Validación de stock en ventas
-8. **HU08** - Gestión de usuarios
-9. **HU09** - Dashboard principal
-10. **HU10** - Navegación y sidebar
+4. **HU05** - Generación de tickets de venta
+5. **HU06** - Cálculo de precios con tiers
+6. **HU07** - Validación de stock en ventas
+7. **HU08** - Gestión de usuarios
+8. **HU09** - Dashboard principal
+9. **HU10** - Navegación y sidebar
+10. **HU11** - Transferencias entre depósitos
 
-### Sprint 2: Funcionalidades Avanzadas
-11. **HU11** - Transferencias entre depósitos
-12. **HU12** - Validación de stock en transferencias
-13. **HU13** - Reportes de ventas
-14. **HU14** - Reportes de stock
-15. **HU15** - Exportación de datos
-16. **HU16** - Gestión de depósitos
-17. **HU17** - Historial de movimientos
-18. **HU18** - Notificaciones del sistema
-19. **HU19** - Configuración de la aplicación
-20. **HU20** - Optimización y rendimiento
+### Sprint 2: Funcionalidades Avanzadas (2 semanas)
+11. **HU12** - Validación de stock en transferencias
+12. **HU13** - Reportes de ventas
+13. **HU14** - Reportes de stock
+14. **HU15** - Exportación de datos
+15. **HU16** - Gestión de depósitos
+16. **HU17** - Historial de movimientos
+17. **HU19** - Configuración de la aplicación
+18. **HU20** - Optimización y rendimiento
+
+### Sprint 3: IA y Notificaciones (1 mes)
+19. **HU04** - Reconocimiento de productos por IA
+20. **HU18** - Notificaciones del sistema (WhatsApp)
+21. **HU21** - Mejoras estéticas y UX
+22. **HU22** - Integración completa de IA
+23. **HU23** - Sistema de notificaciones avanzado
 
 ## 📊 Modelo de Datos
 
