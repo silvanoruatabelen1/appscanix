@@ -1,20 +1,23 @@
 {
-  "SAL-CELUSAL": {
-    "sku": "SAL-CELUSAL",
-    "nombre": "Sal Celusal",
-    "descripcion": "Sal de Mesa - Celusal",
-    "precio": 450
+  "sal_celusal_500g": {
+    "sku": "SAL-001",
+    "nombre": "Sal Celusal 500g",
+    "categoria": "Almacén",
+    "precio_base": 250,
+    "samples": 29
   },
-  "LECHE-SERENISIMA": {
-    "sku": "LECHE-SERENISIMA", 
-    "nombre": "Leche La Serenísima",
-    "descripcion": "Leche Entera - La Serenísima",
-    "precio": 800
+  "leche_serenisima_protein_1l": {
+    "sku": "LEC-001",
+    "nombre": "Leche La Serenísima Protein 1L",
+    "categoria": "Lácteos",
+    "precio_base": 850,
+    "samples": 0
   },
-  "MAYONESA-HELLMANNS": {
-    "sku": "MAYONESA-HELLMANNS",
-    "nombre": "Mayonesa Hellmann's",
-    "descripcion": "Mayonesa - Hellmann's",
-    "precio": 1200
+  "mayonesa_hellmanns_500ml": {
+    "sku": "MAY-001",
+    "nombre": "Mayonesa Hellmann's Suave 500ml",
+    "categoria": "Almacén",
+    "precio_base": 1200,
+    "samples": 27
   }
 }

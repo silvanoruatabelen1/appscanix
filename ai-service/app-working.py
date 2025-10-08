@@ -4,9 +4,12 @@ import json
 import os
 import random
 import numpy as np
+import pickle
 from ultralytics import YOLO
 from PIL import Image
 import io
+from sentence_transformers import SentenceTransformer
+from sklearn.neighbors import NearestNeighbors
 
 app = Flask(__name__)
 CORS(app)
@@ -14,15 +17,20 @@ CORS(app)
 # Configuración
 MODEL_PATH = 'models/best.pt'
 PRODUCT_MAPPING_PATH = 'models/product_mapping.json'
-CONFIDENCE_THRESHOLD = 0.5
+KNOWLEDGE_BASE_PATH = 'models/knowledge_base.pkl'
+CONFIDENCE_THRESHOLD = 0.25  # Bajar umbral para detectar más objetos
+DISTANCE_THRESHOLD = 0.5  # Umbral para k-NN
 
 # Variables globales
 yolo_model = None
 product_mapping = None
+knowledge_base = None
+clip_model = None
+nn_model = None
 
 def load_models():
     """Cargar modelos y datos"""
-    global yolo_model, product_mapping
+    global yolo_model, product_mapping, knowledge_base, clip_model, nn_model
     
     try:
         print("🚀 Iniciando SCANIX AI Service...")
@@ -40,6 +48,27 @@ def load_models():
         with open(PRODUCT_MAPPING_PATH, 'r', encoding='utf-8') as f:
             product_mapping = json.load(f)
         print("✅ Product mapping cargado")
+        
+        # Cargar knowledge base
+        if os.path.exists(KNOWLEDGE_BASE_PATH):
+            with open(KNOWLEDGE_BASE_PATH, 'rb') as f:
+                knowledge_base = pickle.load(f)
+            print("✅ Knowledge base cargada")
+            
+            # Cargar CLIP
+            clip_model = SentenceTransformer('clip-ViT-B-32')
+            print("✅ CLIP cargado")
+            
+            # Preparar k-NN
+            if knowledge_base:
+                product_ids = list(knowledge_base.keys())
+                embeddings = [knowledge_base[pid] for pid in product_ids]
+                nn_model = NearestNeighbors(n_neighbors=1, metric='cosine')
+                nn_model.fit(np.array(embeddings))
+                print("✅ k-NN entrenado")
+        else:
+            print("⚠️ Knowledge base no encontrada, usando reconocimiento simulado")
+            knowledge_base = None
         
         print("🎉 Modelos cargados exitosamente")
         return True
@@ -74,55 +103,74 @@ def recognize_product():
         recognized_items = []
         
         if yolo_model is not None:
-            # Usar YOLO real
+            # Usar YOLO + CLIP + k-NN
             try:
+                # Redimensionar imagen si es muy grande
+                max_size = 1280
+                if image.width > max_size or image.height > max_size:
+                    ratio = min(max_size / image.width, max_size / image.height)
+                    new_size = (int(image.width * ratio), int(image.height * ratio))
+                    image = image.resize(new_size, Image.Resampling.LANCZOS)
+                    print(f"🔄 Imagen redimensionada a {new_size}")
+                
                 results = yolo_model(image)
                 detections = []
                 
                 for r in results:
                     for box in r.boxes:
                         confidence = float(box.conf[0])
-                        class_id = int(box.cls[0])  # Obtener la clase detectada por YOLO
                         if confidence > CONFIDENCE_THRESHOLD:
                             x1, y1, x2, y2 = map(int, box.xyxy[0])
                             cropped_img = image.crop((x1, y1, x2, y2))
                             detections.append({
                                 "image": cropped_img, 
                                 "confidence": confidence,
-                                "class_id": class_id,  # Clase detectada por YOLO
                                 "box": [x1, y1, x2, y2]
                             })
                 
-                if detections:
-                    # Usar el modelo YOLO entrenado para reconocer productos específicos
+                if detections and clip_model and nn_model and knowledge_base:
+                    # Usar CLIP + k-NN para identificar productos específicos
                     for detection in detections:
-                        confidence = detection["confidence"]
-                        class_id = detection["class_id"]
-                        
-                        # Mapear las clases del modelo YOLO a nuestros productos
-                        # El modelo está entrenado para detectar: leche, sal, mayonesa
-                        # Mapeo basado en las clases del modelo entrenado
-                        if class_id == 0:  # Leche
-                            selected_product = "LECHE-SERENISIMA"
-                        elif class_id == 1:  # Sal
-                            selected_product = "SAL-CELUSAL"
-                        elif class_id == 2:  # Mayonesa
-                            selected_product = "MAYONESA-HELLMANNS"
-                        else:
-                            # Clase desconocida, usar fallback
-                            selected_product = "LECHE-SERENISIMA"
-                        
-                        product_info = product_mapping[selected_product]
-                        
-                        recognized_items.append({
-                            "product_id": selected_product,
-                            "sku": product_info["sku"],
-                            "nombre": product_info["nombre"],
-                            "confidence": confidence,
-                            "match_distance": 1.0 - confidence,  # Distancia inversa a la confianza
-                            "precio": product_info["precio"],
-                            "descripcion": product_info["descripcion"]
-                        })
+                        try:
+                            # Generar embedding con CLIP
+                            img_embedding = clip_model.encode(detection["image"])
+                            
+                            # Buscar producto más cercano con k-NN
+                            distances, indices = nn_model.kneighbors(img_embedding.reshape(1, -1), n_neighbors=1)
+                            best_distance = distances[0][0]
+                            best_index = indices[0][0]
+                            
+                            if best_distance < DISTANCE_THRESHOLD:
+                                # Obtener ID del producto desde knowledge_base
+                                product_ids = list(knowledge_base.keys())
+                                product_id = product_ids[best_index]
+                                
+                                # Buscar en product_mapping
+                                product_info = None
+                                for key, value in product_mapping.items():
+                                    if value.get("sku") == product_id or key == product_id:
+                                        product_info = value
+                                        break
+                                
+                                if product_info:
+                                    recognized_items.append({
+                                        "product_id": product_id,
+                                        "sku": product_info["sku"],
+                                        "nombre": product_info["nombre"],
+                                        "confidence": detection["confidence"],
+                                        "match_distance": float(best_distance),
+                                        "precio": product_info["precio_base"],
+                                        "descripcion": f"{product_info['categoria']} - {product_info['nombre']}"
+                                    })
+                                    print(f"✅ Producto reconocido: {product_info['nombre']} (distancia: {best_distance:.3f})")
+                                else:
+                                    print(f"⚠️ Producto {product_id} no encontrado en mapping")
+                            else:
+                                print(f"⚠️ Distancia muy alta: {best_distance:.3f} > {DISTANCE_THRESHOLD}")
+                                
+                        except Exception as e:
+                            print(f"⚠️ Error en CLIP/k-NN: {e}")
+                            continue
                     
             except Exception as e:
                 print(f"⚠️ Error en YOLO: {e}, usando reconocimiento simulado")
