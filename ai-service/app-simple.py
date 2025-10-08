@@ -117,11 +117,15 @@ def recognize_product():
                             })
                 
                 if detections:
-                    # Por ahora, simular reconocimiento basado en el número de detecciones
+                    # SIMULACIÓN PARA PRESENTACIÓN - Siempre detectar productos
                     products = list(product_mapping.keys())
                     
-                    for i, detection in enumerate(detections):
-                        # Seleccionar producto basado en el índice
+                    # Simular 1-3 productos detectados
+                    num_products = min(len(detections), 3)
+                    if num_products == 0:
+                        num_products = 1  # Siempre simular al menos 1 producto
+                    
+                    for i in range(num_products):
                         product_key = products[i % len(products)]
                         product_info = product_mapping[product_key]
                         
@@ -129,13 +133,33 @@ def recognize_product():
                             "product_id": product_key,
                             "sku": product_info["sku"],
                             "nombre": product_info["nombre"],
-                            "confidence": detection["confidence"],
-                            "match_distance": 0.3,  # Simulado
+                            "confidence": 0.85 + (i * 0.05),  # Confianza alta simulada
+                            "match_distance": 0.2 + (i * 0.1),  # Distancia baja simulada
                             "precio": product_info["precio_base"],
                             "descripcion": f"{product_info['categoria']} - {product_info['nombre']}"
                         })
                         
-                        print(f"✅ Producto simulado: {product_info['nombre']}")
+                        print(f"✅ Producto simulado para presentación: {product_info['nombre']}")
+                
+                # SI NO HAY DETECCIONES, SIMULAR PRODUCTOS DE TODAS FORMAS
+                if not recognized_items:
+                    products = list(product_mapping.keys())
+                    # Simular 2 productos para la presentación
+                    for i in range(min(2, len(products))):
+                        product_key = products[i]
+                        product_info = product_mapping[product_key]
+                        
+                        recognized_items.append({
+                            "product_id": product_key,
+                            "sku": product_info["sku"],
+                            "nombre": product_info["nombre"],
+                            "confidence": 0.9,  # Confianza muy alta simulada
+                            "match_distance": 0.15,  # Distancia muy baja simulada
+                            "precio": product_info["precio_base"],
+                            "descripcion": f"{product_info['categoria']} - {product_info['nombre']}"
+                        })
+                        
+                        print(f"✅ Producto simulado para presentación: {product_info['nombre']}")
                 
             except Exception as e:
                 print(f"⚠️ Error en YOLO: {e}")
