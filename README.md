@@ -1,236 +1,217 @@
-# 🛒 SCANIX - Smart Shop System
-
-**Sistema inteligente de reconocimiento de productos y gestión de inventario**
+# 🛒 SCANIX - Sistema de Gestión Inteligente
 
 ## 📋 Descripción
 
-SCANIX es una aplicación web completa que permite el reconocimiento automático de productos mediante inteligencia artificial, gestión de inventario, transferencias entre depósitos, generación de tickets de venta y reportes detallados.
+SCANIX es un sistema de gestión inteligente para comercios que combina reconocimiento de productos por IA con gestión de stock, ventas y transferencias entre depósitos. El sistema permite escanear productos con la cámara del celular, generar tickets de venta, gestionar inventario y realizar transferencias entre múltiples depósitos.
 
-## 🚀 Características Principales
+## 🚀 Tecnologías Utilizadas
 
-### ✅ Funcionalidades Implementadas
+### Frontend
+- **React 18** con TypeScript
+- **Vite** como bundler
+- **Tailwind CSS** para estilos
+- **shadcn/ui** para componentes
+- **Zustand** para manejo de estado
+- **React Router** para navegación
 
-- **🔍 Reconocimiento de Productos**: IA para identificar productos por imagen
-- **📦 Gestión de Inventario**: Control completo de stock por depósito
-- **🏪 Gestión de Depósitos**: CRUD completo de depósitos
-- **🔄 Transferencias**: Sistema de transferencias entre depósitos con remitos
-- **🧾 Tickets de Venta**: Generación y gestión de tickets
-- **📊 Reportes**: Dashboard con KPIs, reportes de ventas y stock
-- **📄 Exportación CSV**: Exportación de reportes en formato CSV
-- **🖨️ Impresión**: Sistema de impresión optimizado para tickets y remitos
-- **💰 Tiers de Precios**: Sistema de precios escalonados por cantidad
+### Backend
+- **Node.js** con Express
+- **SQLite3** para base de datos
+- **JWT** para autenticación
+- **Multer** para manejo de archivos
 
-### 🛠️ Stack Tecnológico
+### IA/ML
+- **Python 3.12** con Flask
+- **YOLOv8** para detección de objetos
+- **CLIP** para embeddings de imágenes
+- **k-NN** para clasificación de productos
+- **OpenCV** para procesamiento de imágenes
 
-**Frontend:**
-- React 18 + TypeScript
-- Vite (build tool)
-- React Router (navegación)
-- Zustand (state management)
-- Tailwind CSS + shadcn/ui (UI components)
-- Date-fns (manejo de fechas)
-
-**Backend:**
-- Node.js + Express
-- SQLite3 (base de datos)
-- CORS, Helmet (seguridad)
-- Morgan (logging)
-- Multer (file uploads)
-
-## 🏗️ Arquitectura del Proyecto
+## 🏗️ Arquitectura del Sistema
 
 ```
-scanix-smart-shop-main/
-├── src/                          # Frontend (React + TypeScript)
-│   ├── components/              # Componentes reutilizables
-│   ├── pages/                   # Páginas principales
-│   ├── store/                   # Zustand stores
-│   ├── services/                # APIs y servicios
-│   ├── types/                   # Definiciones TypeScript
-│   └── utils/                   # Utilidades
-├── backend/                     # Backend (Node.js + Express)
-│   ├── src/                     # Código fuente del servidor
-│   ├── routes/                  # Rutas de la API
-│   └── dev.db                   # Base de datos SQLite
-└── docs/                        # Documentación
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Backend       │    │   AI Service    │
+│   (React)       │◄──►│   (Node.js)     │◄──►│   (Python)      │
+│   Port: 8080    │    │   Port: 3001    │    │   Port: 5001    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-## 🚦 Instalación y Ejecución
+## 📦 Instalación y Configuración
 
 ### Prerrequisitos
-
-- Node.js 18+ 
-- npm o yarn
+- Node.js 18+
+- Python 3.12+
 - Git
 
-### 1. Clonar el repositorio
-
+### Instalación Rápida
 ```bash
+# Clonar repositorio
 git clone https://github.com/silvanoruatabelen1/appscanix.git
 cd appscanix
-```
 
-### 2. Instalar dependencias
-
-**Frontend:**
-```bash
+# Instalar dependencias del backend
 npm install
-```
 
-**Backend:**
-```bash
-cd backend
+# Instalar dependencias del frontend
+cd scanix-smart-shop-main
 npm install
+
+# Instalar dependencias del AI service
+cd ../ai-service
+pip install -r requirements.txt
 ```
 
-### 3. Configurar base de datos
-
+### Ejecución
 ```bash
-cd backend
-npm run init-db
-```
+# Terminal 1: Backend
+node scanix-server-clean.js
 
-### 4. Ejecutar la aplicación
+# Terminal 2: AI Service
+cd ai-service
+python app-simple.py
 
-**Backend (Terminal 1):**
-```bash
-cd backend
+# Terminal 3: Frontend
+cd scanix-smart-shop-main
 npm run dev
-# Servidor corriendo en http://localhost:3001
 ```
 
-**Frontend (Terminal 2):**
-```bash
-npm run dev
-# Aplicación corriendo en http://localhost:5173
-```
+## 🔐 Credenciales de Acceso
 
-## 📚 Uso del Sistema
+- **Admin:** admin / admin123
+- **Usuarios de prueba:** cajero1, operador1
 
-### 1. Escaneo de Productos
-- Ve a la página "Escanear"
-- Sube una imagen o usa la cámara
-- El sistema reconocerá automáticamente los productos
-- Agrega productos al carrito
+## 📱 Funcionalidades Principales
 
-### 2. Gestión de Depósitos
-- Accede a "Depósitos" en el menú
-- Crea, edita o elimina depósitos
-- Visualiza información de stock por depósito
+### 👥 Gestión de Usuarios
+- Crear usuarios con roles (Admin, Operador, Cajero)
+- Contraseñas temporales con cambio obligatorio
+- Gestión completa de usuarios (activar/desactivar, eliminar)
 
-### 3. Transferencias
-- Ve a "Transferencias"
-- Crea nueva transferencia
-- Selecciona depósito origen y destino
-- Agrega productos y cantidades
-- Genera remito imprimible
+### 🤖 Reconocimiento de Productos
+- Escaneo con cámara del celular
+- Reconocimiento de 3 productos argentinos específicos
+- Integración con YOLOv8 + CLIP + k-NN
 
-### 4. Reportes
-- Accede a "Dashboard de Reportes"
-- Visualiza KPIs del sistema
-- Filtra reportes por fechas y depósitos
-- Exporta datos en formato CSV
+### 🧾 Sistema de Ventas
+- Generación de tickets
+- Cálculo automático de precios con tiers
+- Validación de stock en tiempo real
 
-## 🎯 Historias de Usuario Implementadas
+### 🔄 Transferencias
+- Transferencias entre depósitos
+- Validación de stock disponible
+- Registro de movimientos
 
-### Sprint 1: Core Functionality
-- ✅ HU01: Reconocimiento de productos
-- ✅ HU02: Gestión de productos
-- ✅ HU03: Gestión de depósitos
-- ✅ HU04: Control de stock
+### 📊 Reportes
+- Reportes de ventas y stock
+- Exportación a CSV/PDF
+- KPIs y métricas
 
-### Sprint 2: Transactions
-- ✅ HU05: Generación de tickets
-- ✅ HU06: Gestión de carrito
-- ✅ HU14: Transferencias entre depósitos
-- ✅ HU15: Remitos de transferencia
+## 🎯 Product Backlog
 
-### Sprint 3: Reports & Analytics
-- ✅ HU17: Reportes de ventas
-- ✅ HU18: Exportación CSV
-- ✅ KPIs del sistema
-- ✅ Dashboard analytics
+### Sprint 1: Funcionalidades Core
+1. **HU01** - Autenticación y roles de usuario
+2. **HU02** - Gestión de productos y catálogo
+3. **HU03** - Sistema de stock por depósito
+4. **HU04** - Reconocimiento de productos por IA
+5. **HU05** - Generación de tickets de venta
+6. **HU06** - Cálculo de precios con tiers
+7. **HU07** - Validación de stock en ventas
+8. **HU08** - Gestión de usuarios
+9. **HU09** - Dashboard principal
+10. **HU10** - Navegación y sidebar
 
-## 🔧 Configuración
-
-### Variables de Entorno
-
-**Frontend (.env):**
-```env
-VITE_API_URL=http://localhost:3001/api
-```
-
-**Backend (.env):**
-```env
-DATABASE_URL="file:./dev.db"
-PORT=3001
-```
-
-## 🧪 Testing
-
-### Backend API Testing
-```bash
-cd backend
-node test-sprint1.js  # Pruebas Sprint 1
-node test-sprint2.js  # Pruebas Sprint 2
-node test-sprint3.js  # Pruebas Sprint 3
-```
-
-### Endpoints Principales
-
-- `GET /api/health` - Health check
-- `GET /api/products` - Listar productos
-- `GET /api/deposits` - Listar depósitos
-- `GET /api/stock/:depositId` - Stock por depósito
-- `POST /api/tickets` - Crear ticket
-- `GET /api/transfers` - Listar transferencias
-- `GET /api/reports/kpis` - KPIs del sistema
+### Sprint 2: Funcionalidades Avanzadas
+11. **HU11** - Transferencias entre depósitos
+12. **HU12** - Validación de stock en transferencias
+13. **HU13** - Reportes de ventas
+14. **HU14** - Reportes de stock
+15. **HU15** - Exportación de datos
+16. **HU16** - Gestión de depósitos
+17. **HU17** - Historial de movimientos
+18. **HU18** - Notificaciones del sistema
+19. **HU19** - Configuración de la aplicación
+20. **HU20** - Optimización y rendimiento
 
 ## 📊 Modelo de Datos
 
 ### Entidades Principales
+- **Users:** Usuarios del sistema
+- **Products:** Catálogo de productos
+- **Deposits:** Depósitos/almacenes
+- **Stock:** Stock por producto y depósito
+- **Tickets:** Tickets de venta
+- **Transfers:** Transferencias entre depósitos
+- **StockMovements:** Historial de movimientos
 
-- **Products**: Productos con tiers de precios
-- **Deposits**: Depósitos/almacenes
-- **Stock**: Inventario por producto y depósito
-- **Tickets**: Tickets de venta
-- **Transfers**: Transferencias entre depósitos
-- **Stock Movements**: Movimientos de stock
+## 🎨 Estándares de Codificación
 
-## 🚀 Despliegue
+### Frontend (React/TypeScript)
+- **ESLint** con configuración estricta
+- **Prettier** para formateo de código
+- **Convención de nombres:** camelCase para variables, PascalCase para componentes
+- **Estructura de carpetas:** Feature-based organization
+- **Hooks personalizados** para lógica reutilizable
 
-### Producción
-1. Build del frontend: `npm run build`
-2. Configurar variables de entorno
-3. Inicializar base de datos
-4. Ejecutar: `npm start`
+### Backend (Node.js)
+- **ESLint** con configuración Node.js
+- **Convención de nombres:** camelCase
+- **Estructura modular** con separación de responsabilidades
+- **Manejo de errores** centralizado
+- **Validación de datos** en todas las rutas
 
-## 🤝 Contribución
+### Python (AI Service)
+- **PEP 8** para estilo de código
+- **Type hints** para mejor documentación
+- **Docstrings** en todas las funciones
+- **Manejo de excepciones** robusto
 
-Este proyecto fue desarrollado como trabajo integrador para la materia "Ingeniería y Calidad de Software" en UTN San Francisco.
+## 🧪 Plan de Calidad
 
-### Desarrollado por:
-- **Silvano Ruata Belén**
-- Universidad Tecnológica Nacional - San Francisco
+### Testing
+- **Unit Tests** para funciones críticas
+- **Integration Tests** para APIs
+- **E2E Tests** para flujos principales
+- **Performance Tests** para reconocimiento de IA
 
-## 📄 Licencia
+### Code Quality
+- **Code Reviews** obligatorios
+- **SonarQube** para análisis estático
+- **Coverage** mínimo del 80%
+- **Documentación** actualizada
 
-Este proyecto es para fines educativos y académicos.
+### Deployment
+- **Docker** para containerización
+- **CI/CD** con GitHub Actions
+- **Environment** separation (dev/staging/prod)
+- **Monitoring** con logs estructurados
 
-## 🔮 Roadmap
+## 📈 Métricas de Calidad
 
-### Próximas Funcionalidades
-- [ ] Sprint 4: Reconocimiento IA avanzado
-- [ ] Autenticación y usuarios
-- [ ] Notificaciones push
-- [ ] Modo offline
-- [ ] App móvil
+- **Cobertura de código:** 85%
+- **Tiempo de respuesta:** < 2s
+- **Disponibilidad:** 99.9%
+- **Seguridad:** OWASP Top 10 compliance
+
+## 🔒 Seguridad
+
+- **Autenticación JWT** con expiración
+- **Validación de entrada** en todas las APIs
+- **CORS** configurado correctamente
+- **Sanitización** de datos de usuario
+- **Logs de auditoría** para acciones críticas
 
 ## 📞 Soporte
 
 Para soporte técnico o consultas:
-- GitHub Issues: [https://github.com/silvanoruatabelen1/appscanix/issues](https://github.com/silvanoruatabelen1/appscanix/issues)
+- **Email:** soporte@scanix.com
+- **GitHub Issues:** [Reportar problemas](https://github.com/silvanoruatabelen1/appscanix/issues)
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
-⭐ **¡Dale una estrella al proyecto si te resultó útil!** ⭐
+**Desarrollado con ❤️ para la UTN San Francisco - Ingeniería y Calidad de Software**
