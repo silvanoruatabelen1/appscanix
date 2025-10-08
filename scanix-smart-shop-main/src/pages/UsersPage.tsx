@@ -126,10 +126,46 @@ const UsersPage: React.FC = () => {
 
       const data = await response.json();
       
+      const tempPassword = data.temporaryPassword || finalUserData.password;
+      
+      // Mostrar modal con credenciales detalladas
+      setShowCreateDialog(false);
+      
+      // Crear modal de credenciales
+      const credentialsModal = document.createElement('div');
+      credentialsModal.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+          <div style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <h2 style="color: #10b981; margin-bottom: 20px;">✅ Usuario Creado Exitosamente</h2>
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h3 style="margin: 0 0 15px 0; color: #374151;">🔐 Credenciales para ${finalUserData.nombre} ${finalUserData.apellido}</h3>
+              <div style="margin-bottom: 10px;">
+                <strong>👤 Usuario:</strong> 
+                <span id="username" style="background: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-family: monospace;">${finalUserData.username}</span>
+                <button onclick="navigator.clipboard.writeText('${finalUserData.username}')" style="margin-left: 10px; padding: 4px 8px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Copiar</button>
+              </div>
+              <div style="margin-bottom: 15px;">
+                <strong>🔑 Contraseña Temporal:</strong> 
+                <span id="password" style="background: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-family: monospace;">${tempPassword}</span>
+                <button onclick="navigator.clipboard.writeText('${tempPassword}')" style="margin-left: 10px; padding: 4px 8px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Copiar</button>
+              </div>
+              <div style="background: #fef3c7; padding: 10px; border-radius: 4px; border-left: 4px solid #f59e0b;">
+                <strong>⚠️ Importante:</strong> El usuario debe cambiar esta contraseña en su primer login.
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <button onclick="this.closest('div').remove()" style="padding: 10px 20px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(credentialsModal);
+      
+      // También mostrar toast para confirmación
       toast({
         title: '✅ Usuario creado exitosamente',
-        description: `🔐 Credenciales para ${finalUserData.nombre} ${finalUserData.apellido}:\n👤 Usuario: ${finalUserData.username}\n🔑 Contraseña: ${data.temporaryPassword || finalUserData.password}\n\n⚠️ Debe cambiar la contraseña en el primer login`,
-        duration: 10000, // 10 segundos para que tenga tiempo de copiar
+        description: `Credenciales mostradas en ventana emergente`,
+        duration: 5000,
       });
 
       // Limpiar formulario
