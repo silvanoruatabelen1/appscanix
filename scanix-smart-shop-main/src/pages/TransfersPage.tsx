@@ -18,6 +18,7 @@ const TransfersPage: React.FC = () => {
   const { deposits, fetchDeposits } = useDepositStore();
   const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showWizard, setShowWizard] = useState(false);
   const [filterDeposit, setFilterDeposit] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -30,18 +31,25 @@ const TransfersPage: React.FC = () => {
 
   const loadData = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       await fetchDeposits();
       const transfersData = await dataProvider.getTransfers();
+      console.log('📦 Transferencias cargadas:', transfersData);
       setTransfers(transfersData.sort((a, b) => 
         new Date(b.fechaISO).getTime() - new Date(a.fechaISO).getTime()
       ));
     } catch (error) {
+      console.error('❌ Error cargando transferencias:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+      setError(errorMessage);
       toast({
         title: 'Error',
         description: 'Error cargando transferencias',
         variant: 'destructive',
       });
+      // Establecer array vacío en caso de error
+      setTransfers([]);
     } finally {
       setIsLoading(false);
     }
@@ -160,7 +168,18 @@ const TransfersPage: React.FC = () => {
         </div>
       </div>
 
-      {getFilteredTransfers().length === 0 ? (
+      {error ? (
+        <div className="bg-card rounded-lg p-8 text-center">
+          <div className="text-red-500 mb-4">
+            <ArrowLeftRight className="w-16 h-16 mx-auto mb-4" />
+            <h3 className="text-lg font-medium mb-2">Error cargando transferencias</h3>
+            <p className="text-muted-foreground mb-4">{error}</p>
+          </div>
+          <Button variant="outline" onClick={loadData}>
+            Reintentar
+          </Button>
+        </div>
+      ) : getFilteredTransfers().length === 0 ? (
         <div className="bg-card rounded-lg p-8 text-center">
           <ArrowLeftRight className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-medium mb-2">No hay transferencias</h3>

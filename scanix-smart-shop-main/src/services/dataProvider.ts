@@ -778,11 +778,14 @@ export class DataProvider {
       // Transformar formato del backend al formato esperado
       return transfers.map((t: any) => ({
         id: t.id,
-        fechaISO: t.fechaISO || t.fecha_iso,
-        depositoOrigenId: t.depositoOrigenId || t.origen_id,
-        depositoDestinoId: t.depositoDestinoId || t.destino_id,
+        numero: t.numero,
+        fechaISO: t.fecha || t.fechaISO,
+        depositoOrigenId: t.origen || t.depositoOrigenId,
+        depositoDestinoId: t.destino || t.depositoDestinoId,
         items: t.items || [],
-        estado: 'completado'
+        estado: t.estado || 'completado',
+        total: t.total || 0,
+        usuario: t.usuario || 'admin'
       }));
     }
 
