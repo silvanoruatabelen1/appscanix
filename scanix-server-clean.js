@@ -407,6 +407,73 @@ app.get('/api/users', (req, res) => {
   res.json(mockUsers);
 });
 
+// Obtener detalles de un usuario
+app.get('/api/users/:id', (req, res) => {
+  const user = mockUsers.find(u => u.id === req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  res.json(user);
+});
+
+// Actualizar datos de un usuario (nombre, apellido, email, role, depósitos)
+app.put('/api/users/:id', (req, res) => {
+  const idx = mockUsers.findIndex(u => u.id === req.params.id);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  const allowedFields = ['nombre', 'apellido', 'email', 'role', 'depositosAsignados', 'isActive'];
+  const updated = { ...mockUsers[idx] };
+  allowedFields.forEach(f => {
+    if (req.body[f] !== undefined) {
+      updated[f] = req.body[f];
+    }
+  });
+  mockUsers[idx] = updated;
+  saveUsers();
+  res.json(updated);
+});
+
+// Desactivar usuario
+app.put('/api/users/:id/deactivate', (req, res) => {
+  const user = mockUsers.find(u => u.id === req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  if (user.role === 'admin') {
+    return res.status(400).json({ error: 'No se puede desactivar al administrador' });
+  }
+  user.isActive = false;
+  saveUsers();
+  res.json({ message: 'Usuario desactivado', user });
+});
+
+// Activar usuario
+app.put('/api/users/:id/activate', (req, res) => {
+  const user = mockUsers.find(u => u.id === req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  user.isActive = true;
+  saveUsers();
+  res.json({ message: 'Usuario activado', user });
+});
+
+// Eliminar usuario
+app.delete('/api/users/:id', (req, res) => {
+  const idx = mockUsers.findIndex(u => u.id === req.params.id);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  const user = mockUsers[idx];
+  if (user.role === 'admin') {
+    return res.status(400).json({ error: 'No se puede eliminar al administrador' });
+  }
+  mockUsers.splice(idx, 1);
+  saveUsers();
+  res.json({ message: 'Usuario eliminado' });
+});
+
 // =================== PRODUCTOS ===================
 
 app.get('/api/products', (req, res) => {
