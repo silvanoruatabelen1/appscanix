@@ -1,0 +1,20 @@
+{
+  "SAL-CELUSAL": {
+    "sku": "SAL-CELUSAL",
+    "nombre": "Sal Celusal",
+    "descripcion": "Sal de Mesa - Celusal",
+    "precio": 450
+  },
+  "LECHE-SERENISIMA": {
+    "sku": "LECHE-SERENISIMA", 
+    "nombre": "Leche La Serenísima",
+    "descripcion": "Leche Entera - La Serenísima",
+    "precio": 800
+  },
+  "MAYONESA-HELLMANNS": {
+    "sku": "MAYONESA-HELLMANNS",
+    "nombre": "Mayonesa Hellmann's",
+    "descripcion": "Mayonesa - Hellmann's",
+    "precio": 1200
+  }
+}

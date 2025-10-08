@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { CartLine, RecognizedItem } from '@/types';
+import { CartLine } from '@/types';
 import { dataProvider } from '@/services/dataProvider';
 import { mockProductCatalog } from '@/services/mockData';
 
@@ -38,7 +38,6 @@ interface CartState {
   
   // Actions
   addManualLine: (input: string) => Promise<boolean>;
-  addLinesFromRecognition: (items: RecognizedItem[]) => Promise<void>;
   updateQty: (sku: string, qty: number) => Promise<void>;
   removeLine: (sku: string) => void;
   clear: () => void;
@@ -58,55 +57,6 @@ export const useCartStore = create<CartState>()(
       lines: [],
       total: 0,
       depositoId: 'DEP001', // Depósito por defecto
-
-      addLinesFromRecognition: async (items: RecognizedItem[]) => {
-        const { lines } = get();
-        const newLines = [...lines];
-
-        for (const item of items) {
-          // Buscar producto en el catálogo
-          const product = mockProductCatalog.find(p => p.productId === item.productId);
-          
-          if (!product) continue;
-
-          // Obtener tiers de precio
-          const { tiers } = await dataProvider.getPricingTiers(product.productId);
-          const productWithTiers = { ...product, tiers };
-          
-          // Buscar si ya existe la línea
-          const existingIndex = newLines.findIndex(l => l.sku === item.sku);
-          
-          if (existingIndex >= 0) {
-            // Merge: sumar cantidades
-            const newQty = Math.min(newLines[existingIndex].qty + item.qty, 999);
-            const precioAplicado = priceForQty(productWithTiers, newQty);
-            const subtotal = computeSubtotal(newQty, precioAplicado);
-            
-            newLines[existingIndex] = {
-              ...newLines[existingIndex],
-              qty: newQty,
-              precioAplicado,
-              subtotal,
-            };
-          } else {
-            // Nueva línea
-            const precioAplicado = priceForQty(productWithTiers, item.qty);
-            const subtotal = computeSubtotal(item.qty, precioAplicado);
-            
-            newLines.push({
-              productId: item.productId,
-              sku: item.sku,
-              nombre: item.nombre,
-              qty: item.qty,
-              precioAplicado,
-              subtotal,
-            });
-          }
-        }
-
-        const total = computeTotal(newLines);
-        set({ lines: newLines, total });
-      },
 
       addManualLine: async (input: string) => {
         const { lines } = get();

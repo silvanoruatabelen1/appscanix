@@ -17,7 +17,16 @@ const USERS_FILE = path.join(__dirname, 'scanix-users.json');
 
 // =================== MIDDLEWARES ===================
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:8080', 'http://127.0.0.1:5173'],
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:8080', 
+    'http://localhost:8081', 
+    'http://localhost:8082', 
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:8080',
+    'http://127.0.0.1:8081',
+    'http://127.0.0.1:8082'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -806,25 +815,6 @@ app.get('/api/reports/stock', (req, res) => {
   });
 });
 
-// =================== RECONOCIMIENTO ===================
-
-app.post('/api/recognition/recognize', (req, res) => {
-  console.log('🤖 Reconocimiento solicitado');
-  // Mock de reconocimiento
-  const mockRecognition = mockProducts[Math.floor(Math.random() * mockProducts.length)];
-  
-  res.json({
-    success: true,
-    product: {
-      productId: mockRecognition.productId,
-      sku: mockRecognition.sku,
-      nombre: mockRecognition.nombre,
-      confidence: 0.85 + Math.random() * 0.1,
-      precioBase: mockRecognition.precioBase
-    },
-    message: 'Producto reconocido exitosamente'
-  });
-});
 
 // =================== INICIO DEL SERVIDOR ===================
 
@@ -844,7 +834,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('  🧾 Tickets: /api/tickets');
   console.log('  🔄 Transferencias: /api/transfers');
   console.log('  📈 Reportes: /api/reports/*');
-  console.log('  🤖 Reconocimiento: /api/recognition/recognize');
   console.log('');
   console.log('✅ Todas las funcionalidades corregidas:');
   console.log('  ✓ Transferencias con actualización de stock');
@@ -857,32 +846,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('');
 });
 
-// =================== RUTAS DE RECONOCIMIENTO IA ===================
-
-// Health check del servicio de IA
-app.get('/api/recognition/health', async (req, res) => {
-  try {
-    const axios = require('axios');
-    const response = await axios.get('http://localhost:5000/health', {
-      timeout: 5000
-    });
-    
-    res.json({
-      status: 'ok',
-      ai_service: response.data,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('❌ Error conectando con AI service:', error.message);
-    res.status(503).json({
-      status: 'error',
-      error: 'AI Service no disponible',
-      message: 'El servicio de reconocimiento no está funcionando'
-    });
-  }
-});
-
-// Reconocer bebidas con YOLO
 app.post('/api/recognition/recognize', upload.single('image'), async (req, res) => {
   try {
     console.log('🤖 Procesando reconocimiento YOLO...');

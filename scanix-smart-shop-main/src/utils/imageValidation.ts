@@ -1,12 +1,12 @@
 // Utilidades para validación y procesamiento de imágenes
 import { ImageValidationResult, ImageValidationConfig } from '@/types';
 
-// Configuración por defecto - optimizada para reconocimiento con TensorFlow.js
+// Configuración por defecto - MUY FLEXIBLE para aceptar cualquier imagen
 const DEFAULT_CONFIG: ImageValidationConfig = {
-  maxFileSize: 5 * 1024 * 1024, // 5MB
-  minWidth: 200, // ✅ REDUCIDO: TensorFlow.js funciona bien con imágenes pequeñas
-  minHeight: 200, // ✅ REDUCIDO: Suficiente para reconocimiento de productos
-  allowedFormats: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+  maxFileSize: 50 * 1024 * 1024, // 50MB - Aumentado para fotos de celular
+  minWidth: 50, // ✅ MUY REDUCIDO: Acepta imágenes muy pequeñas
+  minHeight: 50, // ✅ MUY REDUCIDO: Acepta imágenes muy pequeñas
+  allowedFormats: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'],
   compressionQuality: 0.9
 };
 
@@ -42,15 +42,13 @@ export async function validateImage(file: File): Promise<ImageValidationResult> 
     warnings.push('La imagen es muy pequeña, esto puede afectar la calidad del reconocimiento');
   }
 
-  // Validar resolución
+  // Validar resolución - MUY PERMISIVO
   try {
     const dimensions = await getImageDimensions(file);
     
-    if (dimensions.width < currentConfig.minWidth || dimensions.height < currentConfig.minHeight) {
-      return {
-        valid: false,
-        error: `Resolución mínima requerida: ${currentConfig.minWidth}x${currentConfig.minHeight}px. Actual: ${dimensions.width}x${dimensions.height}px`,
-      };
+    // Solo advertencias, nunca errores por resolución
+    if (dimensions.width < 100 || dimensions.height < 100) {
+      warnings.push(`Imagen pequeña (${dimensions.width}x${dimensions.height}px). El reconocimiento puede ser menos preciso.`);
     }
 
     // Advertencia si la resolución es muy alta (procesamiento lento)
@@ -59,10 +57,8 @@ export async function validateImage(file: File): Promise<ImageValidationResult> 
     }
 
   } catch (error) {
-    return {
-      valid: false,
-      error: 'No se pudo validar la imagen. Archivo corrupto o formato no soportado.',
-    };
+    // Si no se puede leer la imagen, intentar procesarla de todas formas
+    warnings.push('No se pudo validar las dimensiones de la imagen, pero se intentará procesar.');
   }
 
   return { 

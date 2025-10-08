@@ -33,6 +33,12 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       return;
     }
 
+    // Mostrar advertencias si las hay (pero continuar con el procesamiento)
+    if (validation.warnings && validation.warnings.length > 0) {
+      console.log('⚠️ Advertencias de imagen:', validation.warnings);
+      // Podrías mostrar un toast con las advertencias aquí si quieres
+    }
+
     // Comprimir si es necesario
     const processedFile = await compressImage(file);
     onImageSelect(processedFile);
@@ -236,7 +242,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              JPG, PNG • Máx. 5MB • Mín. 200x200px
+              JPG, PNG, GIF • Máx. 50MB • Cualquier resolución
             </p>
           </div>
 

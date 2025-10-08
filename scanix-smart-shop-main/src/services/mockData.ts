@@ -2,6 +2,12 @@
 import { Product, Tier } from '@/types';
 
 export const mockProductCatalog: Product[] = [
+  // Productos reconocibles por IA (3 productos específicos)
+  { productId: 'SAL-CELUSAL', sku: 'SAL-CELUSAL', nombre: 'Sal Celusal', descripcion: 'Sal de Mesa - Celusal', precioBase: 450, tiers: [{ id: '1', minQty: 1, maxQty: 5, precio: 450 }, { id: '2', minQty: 6, maxQty: 12, precio: 419 }, { id: '3', minQty: 13, maxQty: null, precio: 383 }] },
+  { productId: 'LECHE-SERENISIMA', sku: 'LECHE-SERENISIMA', nombre: 'Leche La Serenísima', descripcion: 'Leche Entera - La Serenísima', precioBase: 800, tiers: [{ id: '1', minQty: 1, maxQty: 5, precio: 800 }, { id: '2', minQty: 6, maxQty: 12, precio: 744 }, { id: '3', minQty: 13, maxQty: null, precio: 680 }] },
+  { productId: 'MAYONESA-HELLMANNS', sku: 'MAYONESA-HELLMANNS', nombre: 'Mayonesa Hellmann\'s', descripcion: 'Mayonesa - Hellmann\'s', precioBase: 1200, tiers: [{ id: '1', minQty: 1, maxQty: 5, precio: 1200 }, { id: '2', minQty: 6, maxQty: 12, precio: 1116 }, { id: '3', minQty: 13, maxQty: null, precio: 1020 }] },
+  
+  // Productos adicionales para completar el catálogo
   {
     productId: 'P001',
     sku: 'LAP-DELL-001',

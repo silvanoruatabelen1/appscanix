@@ -8,6 +8,9 @@ interface CartTableProps {
   lines: CartLine[];
   onUpdateQty: (sku: string, qty: number) => void;
   onRemoveLine: (sku: string) => void;
+  onIncrementQty?: (sku: string) => void;
+  onDecrementQty?: (sku: string) => void;
+  onSetQty?: (sku: string, qty: number) => void;
   isLoading?: boolean;
 }
 
@@ -15,6 +18,9 @@ export const CartTable: React.FC<CartTableProps> = ({
   lines,
   onUpdateQty,
   onRemoveLine,
+  onIncrementQty,
+  onDecrementQty,
+  onSetQty,
   isLoading = false,
 }) => {
   const handleQtyChange = (sku: string, currentQty: number, delta: number) => {
@@ -64,7 +70,7 @@ export const CartTable: React.FC<CartTableProps> = ({
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => handleQtyChange(line.sku, line.qty, -1)}
+                    onClick={() => onDecrementQty ? onDecrementQty(line.sku) : handleQtyChange(line.sku, line.qty, -1)}
                     disabled={isLoading}
                   >
                     <Minus className="h-3 w-3" />
@@ -74,7 +80,11 @@ export const CartTable: React.FC<CartTableProps> = ({
                     value={line.qty}
                     onChange={(e) => {
                       const newQty = parseInt(e.target.value) || 0;
-                      onUpdateQty(line.sku, newQty);
+                      if (onSetQty) {
+                        onSetQty(line.sku, newQty);
+                      } else {
+                        onUpdateQty(line.sku, newQty);
+                      }
                     }}
                     className="w-16 text-center border border-border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary"
                     min="1"
@@ -85,7 +95,7 @@ export const CartTable: React.FC<CartTableProps> = ({
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => handleQtyChange(line.sku, line.qty, 1)}
+                    onClick={() => onIncrementQty ? onIncrementQty(line.sku) : handleQtyChange(line.sku, line.qty, 1)}
                     disabled={isLoading}
                   >
                     <Plus className="h-3 w-3" />

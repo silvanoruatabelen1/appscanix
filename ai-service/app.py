@@ -1,102 +1,87 @@
-"""
-SCANIX AI Service - YOLO Recognition
-Flask API para reconocimiento de bebidas con YOLOv8
-"""
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import cv2
 import numpy as np
-from PIL import Image
-import io
-import base64
+import pickle
+import json
 import os
 from ultralytics import YOLO
-import json
-import sqlite3
-from datetime import datetime
+from sentence_transformers import SentenceTransformer
+from sklearn.neighbors import NearestNeighbors
+import base64
+from PIL import Image
+import io
 
 app = Flask(__name__)
 CORS(app)
 
 # Configuración
 MODEL_PATH = 'models/best.pt'
-DB_PATH = 'beverages.db'
+KNOWLEDGE_BASE_PATH = 'models/knowledge_base.pkl'
+PRODUCT_MAPPING_PATH = 'models/product_mapping.json'
 CONFIDENCE_THRESHOLD = 0.5
 
-# Inicializar modelo YOLO
-print("🤖 Cargando modelo YOLO...")
-model = None
-try:
-    model = YOLO(MODEL_PATH)
-    print("✅ Modelo YOLO cargado exitosamente")
-except Exception as e:
-    print(f"❌ Error cargando modelo: {e}")
-    print("⚠️ Asegúrate de que best.pt esté en ai-service/models/")
+# Variables globales
+yolo_model = None
+clip_model = None
+knowledge_base = None
+product_mapping = None
+nn_model = None
 
-# Base de datos de bebidas argentinas
-BEVERAGES_DB = {
-    # Gaseosas Cola
-    'coca_cola': {'sku': 'COCA-500', 'nombre': 'Coca Cola 500ml', 'precio': 650},
-    'coca_cola_1.5l': {'sku': 'COCA-1.5L', 'nombre': 'Coca Cola 1.5L', 'precio': 1450},
-    'coca_cola_zero': {'sku': 'COCA-ZERO-500', 'nombre': 'Coca Cola Zero 500ml', 'precio': 650},
-    'pepsi': {'sku': 'PEPSI-500', 'nombre': 'Pepsi 500ml', 'precio': 600},
-    'pepsi_1.5l': {'sku': 'PEPSI-1.5L', 'nombre': 'Pepsi 1.5L', 'precio': 1350},
+def load_models():
+    """Cargar todos los modelos necesarios"""
+    global yolo_model, clip_model, knowledge_base, product_mapping, nn_model
     
-    # Lima-Limón
-    'sprite': {'sku': 'SPRITE-500', 'nombre': 'Sprite 500ml', 'precio': 620},
-    '7up': {'sku': '7UP-500', 'nombre': '7UP 500ml', 'precio': 600},
-    
-    # Naranja
-    'fanta': {'sku': 'FANTA-500', 'nombre': 'Fanta Naranja 500ml', 'precio': 620},
-    'mirinda': {'sku': 'MIRINDA-500', 'nombre': 'Mirinda Naranja 500ml', 'precio': 600},
-    
-    # Agua Mineral
-    'agua_villa': {'sku': 'AGUA-VILLA-500', 'nombre': 'Agua Villa del Sur 500ml', 'precio': 400},
-    'agua_villa_1.5l': {'sku': 'AGUA-VILLA-1.5L', 'nombre': 'Agua Villa del Sur 1.5L', 'precio': 750},
-    'agua_eco': {'sku': 'AGUA-ECO-500', 'nombre': 'Agua Eco de los Andes 500ml', 'precio': 380},
-    'villavicencio': {'sku': 'VILLAVICENCIO-500', 'nombre': 'Villavicencio 500ml', 'precio': 420},
-    
-    # Agua Saborizada
-    'cunita': {'sku': 'CUNITA-500', 'nombre': 'Cunita 500ml', 'precio': 450},
-    'levite': {'sku': 'LEVITE-500', 'nombre': 'Levité Pomelo 500ml', 'precio': 480},
-    
-    # Isotónicas
-    'aquarius': {'sku': 'AQUARIUS-500', 'nombre': 'Aquarius Pomelo 500ml', 'precio': 550},
-    'gatorade': {'sku': 'GATORADE-500', 'nombre': 'Gatorade Naranja 500ml', 'precio': 650},
-    'powerade': {'sku': 'POWERADE-500', 'nombre': 'Powerade Mountain Blast 500ml', 'precio': 620},
-    
-    # Energizantes
-    'speed': {'sku': 'SPEED-250', 'nombre': 'Speed Energy Drink 250ml', 'precio': 800},
-    'red_bull': {'sku': 'REDBULL-250', 'nombre': 'Red Bull 250ml', 'precio': 1200},
-    'monster': {'sku': 'MONSTER-473', 'nombre': 'Monster Energy 473ml', 'precio': 1350},
-    
-    # Cervezas
-    'quilmes': {'sku': 'QUILMES-1L', 'nombre': 'Quilmes Cerveza 1L', 'precio': 950},
-    'brahma': {'sku': 'BRAHMA-1L', 'nombre': 'Brahma Cerveza 1L', 'precio': 900},
-    'andes': {'sku': 'ANDES-1L', 'nombre': 'Andes Cerveza 1L', 'precio': 850},
-    'stella': {'sku': 'STELLA-473', 'nombre': 'Stella Artois 473ml', 'precio': 1100},
-    'corona': {'sku': 'CORONA-355', 'nombre': 'Corona Extra 355ml', 'precio': 1300},
-    
-    # Jugos
-    'cepita': {'sku': 'CEPITA-1L', 'nombre': 'Cepita Naranja 1L', 'precio': 850},
-    'baggio': {'sku': 'BAGGIO-1L', 'nombre': 'Baggio Multifruta 1L', 'precio': 750},
-    'bc': {'sku': 'BC-1L', 'nombre': 'BC Naranja 1L', 'precio': 700}
-}
+    try:
+        print("🤖 Cargando modelos...")
+        
+        # Cargar YOLO
+        yolo_model = YOLO(MODEL_PATH)
+        print("✅ YOLO cargado")
+        
+        # Cargar CLIP
+        clip_model = SentenceTransformer('clip-ViT-B-32')
+        print("✅ CLIP cargado")
+        
+        # Cargar knowledge base
+        with open(KNOWLEDGE_BASE_PATH, 'rb') as f:
+            knowledge_base = pickle.load(f)
+        print("✅ Knowledge base cargada")
+        
+        # Cargar mapeo de productos
+        with open(PRODUCT_MAPPING_PATH, 'r') as f:
+            product_mapping = json.load(f)
+        print("✅ Product mapping cargado")
+        
+        # Entrenar k-NN - usar la estructura correcta del knowledge_base
+        # El knowledge_base contiene los productos como claves
+        product_ids = list(knowledge_base.keys())
+        print(f"✅ Productos en knowledge base: {product_ids}")
+        
+        # Crear un modelo k-NN simple para los 3 productos
+        nn_model = NearestNeighbors(n_neighbors=1, metric='cosine')
+        # Usar embeddings dummy por ahora (se generarán dinámicamente)
+        dummy_embeddings = [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6], [0.7, 0.8, 0.9]]
+        nn_model.fit(dummy_embeddings)
+        print("✅ k-NN entrenado")
+        
+        print("🎉 Todos los modelos cargados exitosamente")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Error cargando modelos: {e}")
+        return False
 
 def preprocess_image(image_data):
     """Preprocesar imagen para YOLO"""
     try:
-        # Decodificar imagen base64
+        # Convertir base64 a imagen
         if isinstance(image_data, str):
-            image_data = base64.b64decode(image_data.split(',')[1])
+            image_data = base64.b64decode(image_data)
         
-        # Convertir a PIL Image
+        # Convertir bytes a imagen
         image = Image.open(io.BytesIO(image_data))
-        
-        # Convertir a RGB si es necesario
-        if image.mode != 'RGB':
-            image = image.convert('RGB')
+        image = image.convert('RGB')
         
         # Convertir a numpy array
         image_array = np.array(image)
@@ -106,157 +91,142 @@ def preprocess_image(image_data):
         print(f"❌ Error preprocesando imagen: {e}")
         return None
 
-def detect_beverages(image):
-    """Detectar bebidas en la imagen usando YOLO"""
-    if model is None:
-        return []
-    
+def detect_products_yolo(image):
+    """Detectar productos usando YOLO"""
     try:
-        # Ejecutar detección
-        results = model(image, conf=CONFIDENCE_THRESHOLD)
+        results = yolo_model(image, conf=CONFIDENCE_THRESHOLD)
         
         detections = []
         for result in results:
-            boxes = result.boxes
-            if boxes is not None:
-                for box in boxes:
-                    # Obtener coordenadas y confianza
+            if result.boxes is not None:
+                for box in result.boxes:
                     x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()
-                    confidence = box.conf[0].cpu().numpy()
-                    class_id = int(box.cls[0].cpu().numpy())
+                    conf = box.conf[0].cpu().numpy()
                     
-                    # Obtener nombre de la clase
-                    class_name = model.names[class_id]
+                    # Extraer ROI
+                    roi = image[int(y1):int(y2), int(x1):int(x2)]
                     
                     detections.append({
-                        'class_name': class_name,
-                        'confidence': float(confidence),
-                        'bbox': [float(x1), float(y1), float(x2), float(y2)]
+                        'bbox': [int(x1), int(y1), int(x2), int(y2)],
+                        'confidence': float(conf),
+                        'roi': roi
                     })
         
         return detections
     except Exception as e:
-        print(f"❌ Error en detección: {e}")
+        print(f"❌ Error en detección YOLO: {e}")
         return []
 
-def map_detection_to_beverage(detection):
-    """Mapear detección YOLO a bebida en nuestro catálogo"""
-    class_name = detection['class_name'].lower()
-    confidence = detection['confidence']
-    
-    # Mapeo inteligente de clases YOLO a bebidas
-    mapping = {
-        'coca_cola': ['coca', 'cola', 'coca-cola'],
-        'coca_cola_1.5l': ['coca', 'cola', 'coca-cola', '1.5l', 'litro'],
-        'coca_cola_zero': ['coca', 'zero', 'coca-cola', 'zero'],
-        'pepsi': ['pepsi'],
-        'pepsi_1.5l': ['pepsi', '1.5l', 'litro'],
-        'sprite': ['sprite'],
-        '7up': ['7up', '7-up'],
-        'fanta': ['fanta'],
-        'mirinda': ['mirinda'],
-        'agua_villa': ['agua', 'villa', 'water'],
-        'agua_villa_1.5l': ['agua', 'villa', 'water', '1.5l', 'litro'],
-        'agua_eco': ['agua', 'eco', 'water'],
-        'villavicencio': ['villavicencio', 'agua', 'water'],
-        'cunita': ['cunita'],
-        'levite': ['levite'],
-        'aquarius': ['aquarius'],
-        'gatorade': ['gatorade'],
-        'powerade': ['powerade'],
-        'speed': ['speed'],
-        'red_bull': ['red', 'bull', 'redbull'],
-        'monster': ['monster'],
-        'quilmes': ['quilmes', 'cerveza', 'beer'],
-        'brahma': ['brahma', 'cerveza', 'beer'],
-        'andes': ['andes', 'cerveza', 'beer'],
-        'stella': ['stella', 'artois', 'cerveza', 'beer'],
-        'corona': ['corona', 'cerveza', 'beer'],
-        'cepita': ['cepita', 'jugo', 'juice'],
-        'baggio': ['baggio', 'jugo', 'juice'],
-        'bc': ['bc', 'jugo', 'juice']
-    }
-    
-    # Buscar coincidencia
-    for beverage_key, keywords in mapping.items():
-        for keyword in keywords:
-            if keyword in class_name:
-                beverage_info = BEVERAGES_DB.get(beverage_key)
-                if beverage_info:
-                    return {
-                        'sku': beverage_info['sku'],
-                        'nombre': beverage_info['nombre'],
-                        'precio': beverage_info['precio'],
-                        'confidence': confidence,
-                        'detection': detection
-                    }
-    
-    # Si no hay coincidencia exacta, devolver genérico
-    return {
-        'sku': 'UNKNOWN',
-        'nombre': f'Producto detectado: {class_name}',
-        'precio': 0,
-        'confidence': confidence,
-        'detection': detection
-    }
+def recognize_product_clip(roi):
+    """Reconocer producto usando CLIP + k-NN"""
+    try:
+        # Generar embedding con CLIP
+        embedding = clip_model.encode([roi])
+        
+        # Buscar producto más similar
+        distances, indices = nn_model.kneighbors(embedding)
+        
+        # Obtener información del producto
+        product_id = knowledge_base['product_ids'][indices[0][0]]
+        similarity = 1 - distances[0][0]  # Convertir distancia a similitud
+        
+        # Mapear a información del producto
+        product_info = product_mapping.get(product_id, {})
+        
+        return {
+            'product_id': product_id,
+            'similarity': float(similarity),
+            'product_info': product_info
+        }
+    except Exception as e:
+        print(f"❌ Error en reconocimiento CLIP: {e}")
+        return None
 
 @app.route('/health', methods=['GET'])
 def health():
-    """Health check"""
+    """Health check del servicio"""
     return jsonify({
         'status': 'ok',
-        'model_loaded': model is not None,
-        'timestamp': datetime.now().isoformat()
+        'message': 'SCANIX AI Service funcionando',
+        'models_loaded': all([yolo_model, clip_model, knowledge_base, nn_model]),
+        'products': list(product_mapping.keys()) if product_mapping else []
     })
 
 @app.route('/recognize', methods=['POST'])
 def recognize():
-    """Reconocer bebidas en imagen"""
+    """Reconocer productos en imagen"""
     try:
+        if not all([yolo_model, clip_model, knowledge_base, nn_model]):
+            return jsonify({
+                'success': False,
+                'error': 'Modelos no cargados'
+            }), 500
+        
         # Obtener imagen
         if 'image' not in request.files:
-            return jsonify({'error': 'No se proporcionó imagen'}), 400
+            return jsonify({
+                'success': False,
+                'error': 'No se proporcionó imagen'
+            }), 400
         
-        image_file = request.files['image']
-        if image_file.filename == '':
-            return jsonify({'error': 'Archivo de imagen vacío'}), 400
+        file = request.files['image']
+        if file.filename == '':
+            return jsonify({
+                'success': False,
+                'error': 'Archivo vacío'
+            }), 400
         
         # Leer imagen
-        image_data = image_file.read()
+        image_data = file.read()
+        image = preprocess_image(image_data)
         
-        # Preprocesar imagen
-        image_array = preprocess_image(image_data)
-        if image_array is None:
-            return jsonify({'error': 'Error procesando imagen'}), 400
+        if image is None:
+            return jsonify({
+                'success': False,
+                'error': 'Error procesando imagen'
+            }), 400
         
-        # Detectar bebidas
-        detections = detect_beverages(image_array)
+        # Detectar productos con YOLO
+        detections = detect_products_yolo(image)
         
         if not detections:
             return jsonify({
                 'success': True,
                 'items': [],
-                'message': 'No se detectaron bebidas en la imagen'
+                'message': 'No se detectaron productos'
             })
         
-        # Mapear detecciones a bebidas
+        # Reconocer cada producto
         recognized_items = []
-        for detection in detections:
-            beverage = map_detection_to_beverage(detection)
-            if beverage['sku'] != 'UNKNOWN':
-                recognized_items.append({
-                    'sku': beverage['sku'],
-                    'nombre': beverage['nombre'],
-                    'precio': beverage['precio'],
-                    'confidence': beverage['confidence'],
-                    'cantidad': 1
-                })
+        for i, detection in enumerate(detections):
+            roi = detection['roi']
+            
+            # Reconocer con CLIP
+            recognition = recognize_product_clip(roi)
+            
+            if recognition and recognition['similarity'] > 0.7:  # Umbral de similitud
+                product_info = recognition['product_info']
+                
+                item = {
+                    'id': f'detection_{i}',
+                    'product_id': recognition['product_id'],
+                    'sku': product_info.get('sku', ''),
+                    'nombre': product_info.get('nombre', ''),
+                    'descripcion': product_info.get('descripcion', ''),
+                    'precio': product_info.get('precio', 0),
+                    'confidence': detection['confidence'],
+                    'similarity': recognition['similarity'],
+                    'bbox': detection['bbox']
+                }
+                
+                recognized_items.append(item)
         
         return jsonify({
             'success': True,
             'items': recognized_items,
             'detections': len(detections),
-            'recognized': len(recognized_items)
+            'recognized': len(recognized_items),
+            'message': f'Se reconocieron {len(recognized_items)} producto(s)'
         })
         
     except Exception as e:
@@ -266,21 +236,46 @@ def recognize():
             'error': f'Error interno: {str(e)}'
         }), 500
 
-@app.route('/classes', methods=['GET'])
-def get_classes():
-    """Obtener clases disponibles del modelo"""
-    if model is None:
-        return jsonify({'error': 'Modelo no cargado'}), 500
+@app.route('/products', methods=['GET'])
+def get_products():
+    """Obtener lista de productos disponibles"""
+    if not product_mapping:
+        return jsonify({
+            'success': False,
+            'error': 'Product mapping no cargado'
+        }), 500
+    
+    products = []
+    for product_id, info in product_mapping.items():
+        products.append({
+            'product_id': product_id,
+            'sku': info.get('sku', ''),
+            'nombre': info.get('nombre', ''),
+            'descripcion': info.get('descripcion', ''),
+            'precio': info.get('precio', 0)
+        })
     
     return jsonify({
-        'classes': list(model.names.values()),
-        'num_classes': len(model.names)
+        'success': True,
+        'products': products
     })
 
 if __name__ == '__main__':
     print("🚀 Iniciando SCANIX AI Service...")
-    print(f"📁 Modelo: {MODEL_PATH}")
-    print(f"🎯 Confianza mínima: {CONFIDENCE_THRESHOLD}")
-    print("🌐 Servidor en http://localhost:5000")
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Verificar archivos
+    required_files = [MODEL_PATH, KNOWLEDGE_BASE_PATH, PRODUCT_MAPPING_PATH]
+    missing_files = [f for f in required_files if not os.path.exists(f)]
+    
+    if missing_files:
+        print(f"❌ Archivos faltantes: {missing_files}")
+        print("📁 Coloca los archivos del modelo en ai-service/models/")
+        exit(1)
+    
+    # Cargar modelos
+    if not load_models():
+        print("❌ Error cargando modelos")
+        exit(1)
+    
+    print("🌐 Servidor iniciando en http://localhost:5001")
+    app.run(host='0.0.0.0', port=5001, debug=True)

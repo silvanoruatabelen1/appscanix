@@ -9,11 +9,10 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "install-ai": "cd ../ai-service && pip install -r requirements.txt",
-    "start-ai": "cd ../ai-service && python app.py",
     "ai:install": "cd ../ai-service && pip install -r requirements.txt",
     "ai:start": "cd ../ai-service && python app.py",
-    "ai:dev": "cd ../ai-service && python app.py"
+    "ai:dev": "cd ../ai-service && python app.py",
+    "start:all": "concurrently \"npm run ai:start\" \"npm run dev\" \"node ../scanix-server-clean.js\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
