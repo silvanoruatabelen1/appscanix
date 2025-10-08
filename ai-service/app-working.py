@@ -82,36 +82,35 @@ def recognize_product():
                 for r in results:
                     for box in r.boxes:
                         confidence = float(box.conf[0])
+                        class_id = int(box.cls[0])  # Obtener la clase detectada por YOLO
                         if confidence > CONFIDENCE_THRESHOLD:
                             x1, y1, x2, y2 = map(int, box.xyxy[0])
                             cropped_img = image.crop((x1, y1, x2, y2))
                             detections.append({
                                 "image": cropped_img, 
                                 "confidence": confidence,
+                                "class_id": class_id,  # Clase detectada por YOLO
                                 "box": [x1, y1, x2, y2]
                             })
                 
                 if detections:
-                    # Reconocimiento inteligente de productos específicos
-                    products = list(product_mapping.keys())
-                    
-                    # Analizar características de la imagen para determinar el producto
-                    img_width, img_height = image.size
-                    img_area = img_width * img_height
-                    
-                    # Lógica de reconocimiento basada en características visuales
+                    # Usar el modelo YOLO entrenado para reconocer productos específicos
                     for detection in detections:
-                        box = detection["box"]
-                        box_area = (box[2] - box[0]) * (box[3] - box[1])
-                        relative_size = box_area / img_area
+                        confidence = detection["confidence"]
+                        class_id = detection["class_id"]
                         
-                        # Determinar producto basado en características
-                        if relative_size > 0.3:  # Objeto grande
-                            selected_product = "MAYONESA-HELLMANNS"  # Mayonesa es más grande
-                        elif relative_size > 0.15:  # Objeto mediano
-                            selected_product = "LECHE-SERENISIMA"  # Leche es mediana
-                        else:  # Objeto pequeño
-                            selected_product = "SAL-CELUSAL"  # Sal es pequeña
+                        # Mapear las clases del modelo YOLO a nuestros productos
+                        # El modelo está entrenado para detectar: leche, sal, mayonesa
+                        # Mapeo basado en las clases del modelo entrenado
+                        if class_id == 0:  # Leche
+                            selected_product = "LECHE-SERENISIMA"
+                        elif class_id == 1:  # Sal
+                            selected_product = "SAL-CELUSAL"
+                        elif class_id == 2:  # Mayonesa
+                            selected_product = "MAYONESA-HELLMANNS"
+                        else:
+                            # Clase desconocida, usar fallback
+                            selected_product = "LECHE-SERENISIMA"
                         
                         product_info = product_mapping[selected_product]
                         
@@ -119,8 +118,8 @@ def recognize_product():
                             "product_id": selected_product,
                             "sku": product_info["sku"],
                             "nombre": product_info["nombre"],
-                            "confidence": detection["confidence"],
-                            "match_distance": random.uniform(0.1, 0.3),
+                            "confidence": confidence,
+                            "match_distance": 1.0 - confidence,  # Distancia inversa a la confianza
                             "precio": product_info["precio"],
                             "descripcion": product_info["descripcion"]
                         })
